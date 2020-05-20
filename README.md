@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Adonis fullstack application
 
 This is the fullstack boilerplate for AdonisJs, it comes pre-configured with.
@@ -29,3 +30,6 @@ Run the following command to run startup migrations.
 ```js
 adonis migration:run
 ```
+=======
+# JIRATestAPI
+>>>>>>> 8ffd0b3d38ba763c51d9332c0d686d90a4a925b0
