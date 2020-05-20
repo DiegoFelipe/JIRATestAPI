@@ -3,9 +3,9 @@
 const axios = use('axios')
 const Env = use('Env')
 
-class TestController {
+class CommentController {
 
-    async test({request, response}) {
+    async getComment({request, response}) {
         let baseUrl = 'https://diegofnib.atlassian.net/rest/api/3/issue/TEST-1'
         const userName = Env.get('JIRA_API_USER')
         let password = Env.get('JIRA_API_PASSWD')
@@ -32,4 +32,4 @@ class TestController {
     }
 }
 
-module.exports = TestController
+module.exports = CommentController
