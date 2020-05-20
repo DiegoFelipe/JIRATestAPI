@@ -2,19 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Hello Adonis</title>
+  <title>JIRA API TEST</title>
   {{ style('style') }}
+
+  <script>
+    
+    function showComments() {
+      const request = new XMLHttpRequest();
+      request.open('GET', '/test', true);
+    
+      request.onload = function() {
+        if (this.status >= 200 && this.status < 400) {
+          // Success!
+          var resp = JSON.parse(this.response);
+          console.log(resp.comment.comments[1].body.content[0].content[0].text)
+          document.getElementById('comments').innerHTML = resp.comment.comments[1].body.content[0].content[0].text
+          document.getElementById('comments').removeAttribute('hidden')
+        } else {
+          // We reached our target server, but it returned an error
+    
+        }
+      };
+    
+      request.onerror = function() {
+        // There was a connection error of some sort
+      };
+    
+      request.send();
+    }
+  
+  
+  
+  </script>
 </head>
 <body>
   <section>
-    <div class="logo"></div>
-    <div class="title"></div>
+
     <div class="subtitle">
-      <p>AdonisJs simplicity will make you feel confident about your code</p>
-      <p>
-        Don't know where to start? Read the <a href="https://adonisjs.com/docs">documentation</a>.
+      <p>ISSUE TEST-1</p>
+      <button onclick="showComments()">Get Comment</button>
+      <p hidden id="comments">
+        
       </p>
     </div>
   </section>
 </body>
+
+
 </html>
