@@ -9,18 +9,18 @@
     
     function showComments() {
       const request = new XMLHttpRequest();
-      request.open('GET', '/test', true);
+      request.open('GET', '/get-all-comment', true);
     
       request.onload = function() {
         if (this.status >= 200 && this.status < 400) {
-          // Success!
           var resp = JSON.parse(this.response);
-          console.log(resp.comment.comments[1].body.content[0].content[0].text)
-          document.getElementById('comments').innerHTML = resp.comment.comments[1].body.content[0].content[0].text
+
+          resp.forEach(function(value, index) {
+            document.getElementById('comments').innerHTML += "<p>"+value.body+"</p>"
+          })
           document.getElementById('comments').removeAttribute('hidden')
         } else {
-          // We reached our target server, but it returned an error
-    
+          console.log('Error on request')
         }
       };
     
@@ -30,8 +30,36 @@
     
       request.send();
     }
+
+    function addComment() {
+
+      let value = document.getElementById('add-comment').value
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "/add-comment", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send("comment="+value);
+
+      // const request = new XMLHttpRequest();
+      // request.open('POST', '/add-comment', true);
+    
+      // request.onload = function() {
+      //   if (this.status >= 200 && this.status < 400) {
+      //     // var resp = JSON.parse(this.response);
+
+      //     console.log(this.response)
+      //   } else {
+      //     console.log('Error on request comment')
+      //   }
+      // };
+    
+      // request.onerror = function() {
+
+      // }
+
+      // request.send('comment='+value)
   
-  
+    }
   
   </script>
 </head>
@@ -41,9 +69,10 @@
     <div class="subtitle">
       <p>ISSUE TEST-1</p>
       <button onclick="showComments()">Get Comment</button>
-      <p hidden id="comments">
-        
-      </p>
+      <div hidden id="comments">
+        <input type="text" placeholder="Add comment" id="add-comment">
+        <input type="button" value="Add" onclick="addComment()">
+      </div>
     </div>
   </section>
 </body>
