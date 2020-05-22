@@ -35,13 +35,14 @@
 
     function generateCommentHtml(comment) {
 
+      console.log(comment)
+
       let commentContainer = document.createElement("div")
       commentContainer.classList.add('comment-container')
       commentContainer.classList.add('card-1')
 
       let avatarContainer = document.createElement("img")
       avatarContainer.classList.add('comment-avatar')
-      console.log(comment.author)
       avatarContainer.src = comment.author.avatarUrls['48x48']
 
       let commentBody = document.createElement("div")
@@ -78,7 +79,8 @@
 
     function addComment(title, key) {
 
-      let value = document.getElementById('add-comment').value
+      const value = document.getElementById('add-comment-'+title).value
+      console.log(value)
 
       var xhttp = new XMLHttpRequest();
       xhttp.open("POST", "/add-comment", true);
@@ -87,7 +89,9 @@
         if (xhttp.readyState === xhttp.DONE) {
             if (xhttp.status == 200) {
 
-              let container = generateCommentHtml(value)
+              let comment = JSON.parse(this.response)
+
+              let container = generateCommentHtml(comment)
               document.getElementById('comments-'+title).appendChild(container)
               // document.getElementById("comments-"+title).innerHTML += "<p>"+value+"</p>"
             }
@@ -147,7 +151,7 @@
       const cardInput = document.createElement('input')
       cardInput.setAttribute('type', 'text')
       cardInput.setAttribute('placeholder', 'Add a comment')
-      cardInput.setAttribute('id', 'add-comment')
+      cardInput.setAttribute('id', 'add-comment-'+issueTitle)
 
       const addCommentButton = document.createElement("button");
       addCommentButton.innerHTML = 'Add'

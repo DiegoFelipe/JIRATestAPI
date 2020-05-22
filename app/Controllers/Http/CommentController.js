@@ -43,6 +43,7 @@ class CommentController {
               password: password
           }}).then(function(resp) {
               let resposta = JSON.stringify(resp.data.comments)
+              console.log(resposta[0])
               return resposta
           }).catch(function(error) {
             console.log('Error on Authentication')
@@ -81,16 +82,13 @@ class CommentController {
               password: password
             }
         }).then(function(resp) {
-              console.log(resp)
-            //   let resposta = JSON.stringify(resp)
-            //   return resposta
+              let resposta = JSON.stringify(resp.data)
+              return resposta
+              // console.log(resp.data)
           }).catch(function(error) {
             console.log('Error on Authentication')
           })
 
-          console.log(info)
-
-        
         response.status(200).json(info)
 
     }

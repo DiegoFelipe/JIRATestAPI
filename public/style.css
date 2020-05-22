@@ -42,6 +42,7 @@ section {
 }
 .hidden-div {
   height: 290px;
+  overflow: scroll;
 }
 
 .comment-author-name {
@@ -158,7 +159,7 @@ p {
   margin: 0px;
   padding: 0px 0px 15px 0px;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 30px;
+  font-size: 23px;
   color: #282828;
 }
 .card hr {
