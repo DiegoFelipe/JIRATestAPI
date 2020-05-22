@@ -7,43 +7,134 @@
 
   <script>
     
-    function showComments() {
+    function showComments(title, key) {
       const request = new XMLHttpRequest();
-      request.open('GET', '/test', true);
-    
+      request.open('GET', '/get-all-comment/?+issuekey='+key, true);
+
       request.onload = function() {
         if (this.status >= 200 && this.status < 400) {
-          // Success!
+
           var resp = JSON.parse(this.response);
-          console.log(resp.comment.comments[1].body.content[0].content[0].text)
-          document.getElementById('comments').innerHTML = resp.comment.comments[1].body.content[0].content[0].text
-          document.getElementById('comments').removeAttribute('hidden')
+
+          resp.forEach(function(value, index) {
+            document.getElementById('comments-'+title).innerHTML += "<p>"+value.body+"</p>"
+          })
+          document.getElementById('comments-'+title).removeAttribute('hidden')
+          document.getElementById('add-comment-button').onclick = () => addComment(title, key)
         } else {
-          // We reached our target server, but it returned an error
-    
+          console.log('Error on request')
         }
-      };
+      }
     
       request.onerror = function() {
-        // There was a connection error of some sort
-      };
+      }
     
       request.send();
     }
+
+    function addComment(title, key) {
+
+      let value = document.getElementById('add-comment').value
+
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "/add-comment", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState === xhttp.DONE) {
+            if (xhttp.status == 200) {
+              // document.getElementById("comments-"+title).innerHTML += "<p>"+value+"</p>"
+              let newEl = document.createElement("p")
+              let node = document.createTextNode(value)
+              newEl.appendChild(node)
+
+              document.getElementById("comments-"+title).appendChild(node)
+            }
+        }
+    }
+      xhttp.send("comment="+value)
   
+    }
+
+    function getAllIssuesFromProject() {
+
+      const request = new XMLHttpRequest();
+      request.open('GET', '/get-all-issues-from-project', true);
+    
+      request.onload = function() {
+        if (this.status >= 200 && this.status < 400) {
+          var resp = JSON.parse(this.response);
+
+          resp.forEach(function (value, index) {
+            let issueTitle = resp[index].fields.summary
+            let issueKey = resp[index].key
+            document.getElementById('issues-container').appendChild(generateIssueCard(issueTitle, issueKey))
+          })
+          
+        } else {
+          console.log('Error on request')
+        }
+      }
+    
+      request.onerror = function() {
+      }
+    
+      request.send();
+
+    }
+
+    function generateIssueCard(issueTitle, issuekey) {
+
+      const cardElement = document.createElement('div')
+      cardElement.classList.add('card')
+
+      const h2Element = document.createElement("H2")
+      const h2Title = document.createTextNode(issueTitle)
+      h2Element.appendChild(h2Title)
+
+      const hrElement = document.createElement("hr")
+
+      const hiddenDiv = document.createElement("div")
+      hiddenDiv.setAttribute("hidden", true)
+      hiddenDiv.setAttribute('id', 'comments-'+issueTitle)
+
+      const getCommentButton = document.createElement("button")
+      getCommentButton.innerHTML = 'Get Comments'
+      getCommentButton.onclick = () => showComments(issueTitle, issuekey)
+
+      const cardInput = document.createElement('input')
+      cardInput.setAttribute('type', 'text')
+      cardInput.setAttribute('placeholder', 'Add a comment')
+      cardInput.setAttribute('id', 'add-comment')
+      cardInput.setAttribute('value', 'asd')
+
+      const addCommentButton = document.createElement("button");
+      addCommentButton.innerHTML = 'Add'
+      addCommentButton.setAttribute('id', 'add-comment-button')
+      addCommentButton.onclick = () => addComment(issueTitle, issuekey)
+      // addCommentButton.onclick = function() {
+      //   addComment(issueTitle, issuekey)
+      // }
+
+      cardElement.appendChild(h2Element)
+      cardElement.appendChild(hrElement)
+      cardElement.appendChild(hiddenDiv)
+      cardElement.appendChild(getCommentButton)
+      
+      hiddenDiv.appendChild(cardInput)
+      hiddenDiv.appendChild(addCommentButton)
+
+
+      return cardElement
+}
   
   
   </script>
 </head>
-<body>
+<body onpageshow="getAllIssuesFromProject()">
   <section>
 
-    <div class="subtitle">
-      <p>ISSUE TEST-1</p>
-      <button onclick="showComments()">Get Comment</button>
-      <p hidden id="comments">
-        
-      </p>
+    <div id="issues-container">
+ 
     </div>
   </section>
 </body>

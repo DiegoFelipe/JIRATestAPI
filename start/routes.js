@@ -18,3 +18,6 @@ const Route = use('Route')
 
 Route.on('/').render('welcome')
 Route.get('/get-comment','CommentController.getComment')
+Route.get('/get-all-comment','CommentController.getAllComment')
+Route.post('/add-comment','CommentController.addComment')
+Route.get('/get-all-issues-from-project','IssueController.getAllIssuesFromProject')
