@@ -9,7 +9,7 @@
     
     function showComments(title, key) {
       const request = new XMLHttpRequest();
-      request.open('GET', '/get-all-comment/?+issuekey='+key, true);
+      request.open('GET', '/get-all-comment/?issuekey='+key, true);
 
       request.onload = function() {
         if (this.status >= 200 && this.status < 400) {
@@ -42,16 +42,11 @@
       xhttp.onreadystatechange = function () {
         if (xhttp.readyState === xhttp.DONE) {
             if (xhttp.status == 200) {
-              // document.getElementById("comments-"+title).innerHTML += "<p>"+value+"</p>"
-              let newEl = document.createElement("p")
-              let node = document.createTextNode(value)
-              newEl.appendChild(node)
-
-              document.getElementById("comments-"+title).appendChild(node)
+              document.getElementById("comments-"+title).innerHTML += "<p>"+value+"</p>"
             }
         }
     }
-      xhttp.send("comment="+value)
+      xhttp.send("comment="+value+"&key="+key)
   
     }
 
@@ -100,12 +95,12 @@
       const getCommentButton = document.createElement("button")
       getCommentButton.innerHTML = 'Get Comments'
       getCommentButton.onclick = () => showComments(issueTitle, issuekey)
+      
 
       const cardInput = document.createElement('input')
       cardInput.setAttribute('type', 'text')
       cardInput.setAttribute('placeholder', 'Add a comment')
       cardInput.setAttribute('id', 'add-comment')
-      cardInput.setAttribute('value', 'asd')
 
       const addCommentButton = document.createElement("button");
       addCommentButton.innerHTML = 'Add'

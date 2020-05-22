@@ -25,16 +25,14 @@ class CommentController {
           })
 
         
-        response.status(201).json(info)
+        response.status(200).json(info)
 
 
     }
 
     async getAllComment({request, response}) {
 
-        const issueKey = request.only(['issuekey'])
-        console.log(issueKey)
-        let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/TEST-2/comment`
+        let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/${request.only(['issuekey']).issuekey}/comment`
         const userName = Env.get('JIRA_API_USER')
         let password = Env.get('JIRA_API_PASSWD')
 
@@ -45,20 +43,19 @@ class CommentController {
               password: password
           }}).then(function(resp) {
               let resposta = JSON.stringify(resp.data.comments)
-              console.log(resp)
               return resposta
           }).catch(function(error) {
             console.log('Error on Authentication')
           })
 
         
-        response.status(201).json(comments)
+        response.status(200).json(comments)
 
     }
 
     async addComment({request, response}) {
      
-        let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/TEST-1/comment`
+        let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/${request.only(['key']).key}/comment`
         const userName = Env.get('JIRA_API_USER')
         let password = Env.get('JIRA_API_PASSWD')
 
