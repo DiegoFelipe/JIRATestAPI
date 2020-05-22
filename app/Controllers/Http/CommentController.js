@@ -59,7 +59,6 @@ class CommentController {
         const userName = Env.get('JIRA_API_USER')
         let password = Env.get('JIRA_API_PASSWD')
 
-        
         const comment = request.only(['comment']).comment
         const bodyData = {
             "visibility": {

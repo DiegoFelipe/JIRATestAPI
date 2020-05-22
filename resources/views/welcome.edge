@@ -17,7 +17,8 @@
           var resp = JSON.parse(this.response);
 
           resp.forEach(function(value, index) {
-            document.getElementById('comments-'+title).innerHTML += "<p>"+value.body+"</p>"
+            let container = generateCommentHtml(value)
+            document.getElementById('comments-'+title).appendChild(container)
           })
           document.getElementById('comments-'+title).removeAttribute('hidden')
           document.getElementById('add-comment-button').onclick = () => addComment(title, key)
@@ -32,6 +33,49 @@
       request.send();
     }
 
+    function generateCommentHtml(comment) {
+
+      let commentContainer = document.createElement("div")
+      commentContainer.classList.add('comment-container')
+      commentContainer.classList.add('card-1')
+
+      let avatarContainer = document.createElement("img")
+      avatarContainer.classList.add('comment-avatar')
+      console.log(comment.author)
+      avatarContainer.src = comment.author.avatarUrls['48x48']
+
+      let commentBody = document.createElement("div")
+      commentBody.classList.add("comment-body") // coluna
+
+      let commentAuthorName = document.createElement("div")
+      commentAuthorName.classList.add("comment-author-name")
+
+      let commentAuthorNameText = document.createElement("div")
+      commentAuthorNameText.classList.add("comment-author-name-text")
+      commentAuthorNameText.innerHTML = comment.author.displayName
+
+      commentAuthorName.appendChild(commentAuthorNameText)
+
+      let commentText = document.createElement("div")
+
+      let commentTextContent = document.createElement("div")
+      commentTextContent.classList.add("comment-text-content")
+      commentTextContent.innerHTML = comment.body
+
+      commentText.appendChild(commentTextContent)
+      
+
+      commentContainer.appendChild(avatarContainer)
+      commentContainer.appendChild(commentBody)
+
+      commentBody.appendChild(commentAuthorName)
+      commentBody.appendChild(commentText)
+
+
+      return commentContainer
+
+    }
+
     function addComment(title, key) {
 
       let value = document.getElementById('add-comment').value
@@ -42,7 +86,10 @@
       xhttp.onreadystatechange = function () {
         if (xhttp.readyState === xhttp.DONE) {
             if (xhttp.status == 200) {
-              document.getElementById("comments-"+title).innerHTML += "<p>"+value+"</p>"
+
+              let container = generateCommentHtml(value)
+              document.getElementById('comments-'+title).appendChild(container)
+              // document.getElementById("comments-"+title).innerHTML += "<p>"+value+"</p>"
             }
         }
     }
@@ -91,12 +138,12 @@
       const hiddenDiv = document.createElement("div")
       hiddenDiv.setAttribute("hidden", true)
       hiddenDiv.setAttribute('id', 'comments-'+issueTitle)
+      hiddenDiv.classList.add("hidden-div")
 
       const getCommentButton = document.createElement("button")
       getCommentButton.innerHTML = 'Get Comments'
       getCommentButton.onclick = () => showComments(issueTitle, issuekey)
       
-
       const cardInput = document.createElement('input')
       cardInput.setAttribute('type', 'text')
       cardInput.setAttribute('placeholder', 'Add a comment')
@@ -106,9 +153,6 @@
       addCommentButton.innerHTML = 'Add'
       addCommentButton.setAttribute('id', 'add-comment-button')
       addCommentButton.onclick = () => addComment(issueTitle, issuekey)
-      // addCommentButton.onclick = function() {
-      //   addComment(issueTitle, issuekey)
-      // }
 
       cardElement.appendChild(h2Element)
       cardElement.appendChild(hrElement)
@@ -117,7 +161,6 @@
       
       hiddenDiv.appendChild(cardInput)
       hiddenDiv.appendChild(addCommentButton)
-
 
       return cardElement
 }
