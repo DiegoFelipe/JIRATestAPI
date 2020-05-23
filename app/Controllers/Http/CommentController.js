@@ -5,36 +5,10 @@ const Env = use('Env')
 
 class CommentController {
 
-    async getComment({request, response}) {
-
-        let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/TEST-1`
-        const userName = Env.get('JIRA_API_USER')
-        let password = Env.get('JIRA_API_PASSWD')
-
-
-        const info = await axios.get(baseUrl,{
-            withCredentials: true,
-            auth: {
-              username: userName,
-              password: password
-          }}).then(function(resp) {
-              let resposta = JSON.stringify(resp.data.fields)
-              return resposta
-          }).catch(function(error) {
-            console.log('Error on Authentication')
-          })
-
-        
-        response.status(201).json(info)
-
-
-    }
 
     async getAllComment({request, response}) {
 
-        const issueKey = request.only(['issuekey'])
-        console.log(issueKey)
-        let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/TEST-2/comment`
+        let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/${request.only(['issuekey']).issuekey}/comment`
         const userName = Env.get('JIRA_API_USER')
         let password = Env.get('JIRA_API_PASSWD')
 
@@ -45,24 +19,22 @@ class CommentController {
               password: password
           }}).then(function(resp) {
               let resposta = JSON.stringify(resp.data.comments)
-              console.log(resp)
               return resposta
           }).catch(function(error) {
             console.log('Error on Authentication')
           })
 
         
-        response.status(201).json(comments)
+        response.status(200).json(comments)
 
     }
 
     async addComment({request, response}) {
      
-        let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/TEST-1/comment`
+        let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/${request.only(['key']).key}/comment`
         const userName = Env.get('JIRA_API_USER')
         let password = Env.get('JIRA_API_PASSWD')
 
-        
         const comment = request.only(['comment']).comment
         const bodyData = {
             "visibility": {
@@ -85,16 +57,13 @@ class CommentController {
               password: password
             }
         }).then(function(resp) {
-              console.log(resp)
-            //   let resposta = JSON.stringify(resp)
-            //   return resposta
+              let resposta = JSON.stringify(resp.data)
+              return resposta
+              // console.log(resp.data)
           }).catch(function(error) {
             console.log('Error on Authentication')
           })
 
-          console.log(info)
-
-        
         response.status(200).json(info)
 
     }
