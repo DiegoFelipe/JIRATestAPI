@@ -35,8 +35,6 @@
 
     function generateCommentHtml(comment) {
 
-      console.log(comment)
-
       let commentContainer = document.createElement("div")
       commentContainer.classList.add('comment-container')
       commentContainer.classList.add('card-1')
@@ -80,7 +78,6 @@
     function addComment(title, key) {
 
       const value = document.getElementById('add-comment-'+title).value
-      console.log(value)
 
       var xhttp = new XMLHttpRequest();
       xhttp.open("POST", "/add-comment", true);
@@ -93,8 +90,6 @@
 
               let container = generateCommentHtml(comment)
               document.getElementById('comments-'+title).appendChild(container)
-              console.log(document.getElementById('comments-'+title))
-              // document.getElementById("comments-"+title).innerHTML += "<p>"+value+"</p>"
             }
         }
     }
