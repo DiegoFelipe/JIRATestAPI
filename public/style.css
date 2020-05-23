@@ -64,6 +64,12 @@ section {
   font-size: small;
 }
 
+.issue-type-name {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
 #issues-container {
 
   display: flex;
@@ -159,7 +165,7 @@ p {
   margin: 0px;
   padding: 0px 0px 15px 0px;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 23px;
+  font-size: 17px;
   color: #282828;
 }
 .card hr {

@@ -20,6 +20,7 @@ class IssueController {
               password: password
           }}).then(function(resp) {
               let resposta = JSON.stringify(resp.data.issues)
+              console.log(resposta)
               return resposta
           }).catch(function(error) {
             console.log('Error on Authentication')
@@ -27,6 +28,47 @@ class IssueController {
 
         
         response.status(200).json(info)
+
+    }
+
+    async transiteIssue({request, response}) {
+      //  /rest/api/3/issue/{issueIdOrKey}/transitions
+
+      let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/${request.only(["issuekey"]).issuekey}/${request.only(['transitionID']).transitionID}`
+      const userName = Env.get('JIRA_API_USER')
+      let password = Env.get('JIRA_API_PASSWD')
+
+      const comment = request.only(['comment']).comment
+      const bodyData = {
+          "visibility": {
+              "type": "role",
+              "value": "Administrators"
+            },
+            "body": comment
+      }
+
+      const info = await axios.post(baseUrl,{
+          visibility: {
+              type: "role",
+              value: "Administrators"
+            },
+            body: comment
+      },{
+          withCredentials: true,
+          auth: {
+            username: userName,
+            password: password
+          }
+      }).then(function(resp) {
+            let resposta = JSON.stringify(resp.data)
+            return resposta
+            // console.log(resp.data)
+        }).catch(function(error) {
+          console.log('Error on Authentication')
+        })
+
+      response.status(200).json(info)
+
 
     }
 }

@@ -109,7 +109,7 @@
           resp.forEach(function (value, index) {
             let issueTitle = resp[index].fields.summary
             let issueKey = resp[index].key
-            document.getElementById('issues-container').appendChild(generateIssueCard(issueTitle, issueKey))
+            document.getElementById('issues-container').appendChild(generateIssueCard(issueTitle, issueKey, resp[index]))
           })
           
         } else {
@@ -119,27 +119,35 @@
     
       request.onerror = function() {
       }
-    
+      
       request.send();
-
+      
     }
-
-    function generateIssueCard(issueTitle, issuekey) {
-
+    
+    function generateIssueCard(issueTitle, issuekey, issue) {
+      
       const cardElement = document.createElement('div')
       cardElement.classList.add('card')
-
+      
+      const issueTypeIcon = document.createElement("img")
+      issueTypeIcon.src = issue.fields.issuetype.iconUrl
+      
+      const issueTypeName = document.createElement("span")
+      issueTypeName.classList.add("issue-type-name")
+      issueTypeName.innerText = issue.fields.issuetype.name
+      
       const h2Element = document.createElement("H2")
       const h2Title = document.createTextNode(issueTitle)
+      
       h2Element.appendChild(h2Title)
-
+      
       const hrElement = document.createElement("hr")
-
+      
       const hiddenDiv = document.createElement("div")
       hiddenDiv.setAttribute("hidden", true)
       hiddenDiv.setAttribute('id', 'comments-'+issueTitle)
       hiddenDiv.classList.add("hidden-div")
-
+      
       const getCommentButton = document.createElement("button")
       getCommentButton.innerHTML = 'Get Comments'
       getCommentButton.onclick = () => showComments(issueTitle, issuekey)
@@ -148,12 +156,14 @@
       cardInput.setAttribute('type', 'text')
       cardInput.setAttribute('placeholder', 'Add a comment')
       cardInput.setAttribute('id', 'add-comment-'+issueTitle)
-
+      
       const addCommentButton = document.createElement("button");
       addCommentButton.innerHTML = 'Add'
       addCommentButton.setAttribute('id', 'add-comment-button')
       addCommentButton.onclick = () => addComment(issueTitle, issuekey)
-
+      
+      issueTypeName.appendChild(issueTypeIcon)
+      cardElement.appendChild(issueTypeName)
       cardElement.appendChild(h2Element)
       cardElement.appendChild(hrElement)
       cardElement.appendChild(hiddenDiv)
@@ -170,10 +180,7 @@
 </head>
 <body onpageshow="getAllIssuesFromProject()">
   <section>
-
-    <div id="issues-container">
- 
-    </div>
+    <div id="issues-container"></div>
   </section>
 </body>
 
