@@ -5,30 +5,6 @@ const Env = use('Env')
 
 class CommentController {
 
-    async getComment({request, response}) {
-
-        let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/TEST-1`
-        const userName = Env.get('JIRA_API_USER')
-        let password = Env.get('JIRA_API_PASSWD')
-
-
-        const info = await axios.get(baseUrl,{
-            withCredentials: true,
-            auth: {
-              username: userName,
-              password: password
-          }}).then(function(resp) {
-              let resposta = JSON.stringify(resp.data.fields)
-              return resposta
-          }).catch(function(error) {
-            console.log('Error on Authentication')
-          })
-
-        
-        response.status(200).json(info)
-
-
-    }
 
     async getAllComment({request, response}) {
 
@@ -43,7 +19,6 @@ class CommentController {
               password: password
           }}).then(function(resp) {
               let resposta = JSON.stringify(resp.data.comments)
-              console.log(resposta[0])
               return resposta
           }).catch(function(error) {
             console.log('Error on Authentication')
