@@ -59,11 +59,10 @@
 
       let commentTextContent = document.createElement("div")
       commentTextContent.classList.add("comment-text-content")
-      commentTextContent.innerHTML = comment.body
+      commentTextContent.innerHTML = comment.body.content[0].content[0].text
 
       commentText.appendChild(commentTextContent)
       
-
       commentContainer.appendChild(avatarContainer)
       commentContainer.appendChild(commentBody)
 
@@ -125,7 +124,7 @@
     }
     
     function generateIssueCard(issueTitle, issuekey, issue) {
-      
+
       const cardElement = document.createElement('div')
       cardElement.classList.add('card')
       
@@ -215,6 +214,11 @@
           'statusName': 'Closed',
           'nextStatusButtonName': 'Reopen',
           'nextStatusID': 3
+        },
+        '4': {
+          'statusName': 'Reopened',
+          'nextStatusButtonName': 'Start progress',
+          'nextStatusID': 4
         }
       }
       
@@ -245,7 +249,9 @@
         if (xhttp.readyState === xhttp.DONE) {
             if (xhttp.status == 200) {
 
-              console.log(this.response)
+              if (this.response == '204') {
+                location.reload()
+              }
 
             }
         }

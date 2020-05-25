@@ -37,13 +37,11 @@ class IssueController {
       const userName = Env.get('JIRA_API_USER')
       let password = Env.get('JIRA_API_PASSWD')
 
-      console.log(baseUrl)
-
       const comment = request.only(['comment']).comment
       const bodyData = `{
-     
+        
         "transition": {
-        "id": 4
+          "id": ${request.only(['transitionID']).transitionID}
         }
       }`
       
@@ -53,14 +51,17 @@ class IssueController {
           auth: {
             username: userName,
             password: password
+          },
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
           }
       }).then(function(resp) {
-            // let resposta = JSON.stringify(resp.data)
-            // console.log(resp.data)
-            return resposta
+            // let resposta = JSON.stringify(resp)
+            // console.log(resp.status)
+            return resp.status
         }).catch(function(error) {
-          let errojson = error.toJSON
-          // console.log(error.response)
+          console.log(error)
         })
 
       response.status(200).json(info)
