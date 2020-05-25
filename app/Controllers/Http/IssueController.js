@@ -20,7 +20,6 @@ class IssueController {
               password: password
           }}).then(function(resp) {
               let resposta = JSON.stringify(resp.data.issues)
-              console.log(resposta)
               return resposta
           }).catch(function(error) {
             console.log('Error on Authentication')
@@ -31,40 +30,37 @@ class IssueController {
 
     }
 
-    async transiteIssue({request, response}) {
+    async transactIssue({request, response}) {
       //  /rest/api/3/issue/{issueIdOrKey}/transitions
 
-      let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/${request.only(["issuekey"]).issuekey}/${request.only(['transitionID']).transitionID}`
+      let baseUrl = `${Env.get('JIRA_API_BASE_URL')}issue/${request.only(["issuekey"]).issuekey}/transitions`
       const userName = Env.get('JIRA_API_USER')
       let password = Env.get('JIRA_API_PASSWD')
 
-      const comment = request.only(['comment']).comment
-      const bodyData = {
-          "visibility": {
-              "type": "role",
-              "value": "Administrators"
-            },
-            "body": comment
-      }
+      console.log(baseUrl)
 
-      const info = await axios.post(baseUrl,{
-          visibility: {
-              type: "role",
-              value: "Administrators"
-            },
-            body: comment
-      },{
+      const comment = request.only(['comment']).comment
+      const bodyData = `{
+     
+        "transition": {
+        "id": 4
+        }
+      }`
+      
+
+      const info = await axios.post(baseUrl,bodyData,{
           withCredentials: true,
           auth: {
             username: userName,
             password: password
           }
       }).then(function(resp) {
-            let resposta = JSON.stringify(resp.data)
-            return resposta
+            // let resposta = JSON.stringify(resp.data)
             // console.log(resp.data)
+            return resposta
         }).catch(function(error) {
-          console.log('Error on Authentication')
+          let errojson = error.toJSON
+          // console.log(error.response)
         })
 
       response.status(200).json(info)

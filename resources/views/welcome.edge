@@ -129,12 +129,32 @@
       const cardElement = document.createElement('div')
       cardElement.classList.add('card')
       
+      /***
+       * ISSUE TYPE ICON AND NAME
+       */
       const issueTypeIcon = document.createElement("img")
       issueTypeIcon.src = issue.fields.issuetype.iconUrl
       
       const issueTypeName = document.createElement("span")
       issueTypeName.classList.add("issue-type-name")
-      issueTypeName.innerText = issue.fields.issuetype.name
+
+      /***
+       * ISSUE STATUS
+       */
+      const issueStatus = document.createElement("span")
+      issueStatus.innerText = issue.fields.status.name
+
+
+      /***
+       * TRANSITION BUTTONS
+       */
+
+      const startProgressButton = document.createElement("button")
+
+
+      /***
+       * H2 TITLE
+       */
       
       const h2Element = document.createElement("H2")
       const h2Title = document.createTextNode(issueTitle)
@@ -142,15 +162,20 @@
       h2Element.appendChild(h2Title)
       
       const hrElement = document.createElement("hr")
+
+      /***
+       * HIDDEN DIV - CONTAINS THE ISSUE'S COMMENT
+       */
       
       const hiddenDiv = document.createElement("div")
       hiddenDiv.setAttribute("hidden", true)
       hiddenDiv.setAttribute('id', 'comments-'+issueTitle)
       hiddenDiv.classList.add("hidden-div")
       
-      const getCommentButton = document.createElement("button")
-      getCommentButton.innerHTML = 'Get Comments'
-      getCommentButton.onclick = () => showComments(issueTitle, issuekey)
+      
+      /***
+       * HIDDEN DIV - ADD COMMENTs
+       */
       
       const cardInput = document.createElement('input')
       cardInput.setAttribute('type', 'text')
@@ -158,22 +183,75 @@
       cardInput.setAttribute('id', 'add-comment-'+issueTitle)
       
       const addCommentButton = document.createElement("button");
+      addCommentButton.classList.add("nocss")
       addCommentButton.innerHTML = 'Add'
       addCommentButton.setAttribute('id', 'add-comment-button')
       addCommentButton.onclick = () => addComment(issueTitle, issuekey)
+
+      /***
+       * GET COMMENTS FROM ISSUE BUTton
+       */
       
+      const getCommentButton = document.createElement("button")
+      getCommentButton.innerHTML = 'Get Comments'
+      getCommentButton.onclick = () => showComments(issueTitle, issuekey)
+
+      /***
+       * TRANSACT ISSUE BUTTON
+       */
+      
+      const transactStatus = {
+        '1': {
+          'statusName': 'open',
+          'nextStatusButtonName': 'Start progress',
+          'nextStatusID': 4
+        },
+        '3': {
+          'statusName': 'In progress',
+          'nextStatusButtonName': 'Close',
+          'nextStatusID': 2
+        },
+        '6': {
+          'statusName': 'Closed',
+          'nextStatusButtonName': 'Reopen',
+          'nextStatusID': 3
+        }
+      }
+      
+      const transactIssueButton = document.createElement("button")
+      transactIssueButton.innerHTML = transactStatus[issue.fields.status.id].nextStatusButtonName
+      transactIssueButton.onclick = () => transactIssue(issuekey, transactStatus[issue.fields.status.id].nextStatusID)
+
       issueTypeName.appendChild(issueTypeIcon)
+      issueTypeName.appendChild(issueStatus)
       cardElement.appendChild(issueTypeName)
       cardElement.appendChild(h2Element)
       cardElement.appendChild(hrElement)
       cardElement.appendChild(hiddenDiv)
       cardElement.appendChild(getCommentButton)
+      cardElement.appendChild(transactIssueButton)
       
       hiddenDiv.appendChild(cardInput)
       hiddenDiv.appendChild(addCommentButton)
 
       return cardElement
-}
+    }
+
+    function transactIssue(issuekey, nextStatusID) {
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "/transact-issue", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState === xhttp.DONE) {
+            if (xhttp.status == 200) {
+
+              console.log(this.response)
+
+            }
+        }
+      }
+      xhttp.send("issuekey="+issuekey+"&transitionID="+nextStatusID)
+    }
   
   
   </script>
