@@ -64,6 +64,12 @@ section {
   font-size: small;
 }
 
+.issue-type-name {
+  display: flex;
+  flex-direction: reverse;
+  justify-content: flex-start;
+}
+
 #issues-container {
 
   display: flex;
@@ -73,8 +79,13 @@ section {
   align-content: center;
   max-width: 100%;
   margin: auto;
-  
+}
 
+.nocss {
+  padding: 2px 30px;
+  background-color: #7611a5;
+  color: white;
+  margin-bottom: 10px;
 }
 
 
@@ -157,9 +168,8 @@ p {
 
 .card h1, .card h2, .card h3, .card h4, .card h5 {
   margin: 0px;
-  padding: 0px 0px 15px 0px;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 23px;
+  font-size: 17px;
   color: #282828;
 }
 .card hr {
@@ -196,7 +206,7 @@ p {
   animation-name: p-show;
   animation-duration: 1.5s;
 }
-.card button {
+.card button:not(.nocss) {
   border: none;
   background-color: #7611a5;
   width: 50%;
