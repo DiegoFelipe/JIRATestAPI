@@ -59,7 +59,7 @@
 
       let commentTextContent = document.createElement("div")
       commentTextContent.classList.add("comment-text-content")
-      commentTextContent.innerHTML = comment.body.content[0].content[0].text
+      commentTextContent.innerHTML = comment.body
 
       commentText.appendChild(commentTextContent)
       
@@ -77,6 +77,7 @@
     function addComment(title, key) {
 
       const value = document.getElementById('add-comment-'+title).value
+      console.log(value)
 
       var xhttp = new XMLHttpRequest();
       xhttp.open("POST", "/add-comment", true);
@@ -188,7 +189,7 @@
       addCommentButton.onclick = () => addComment(issueTitle, issuekey)
 
       /***
-       * GET COMMENTS FROM ISSUE BUTton
+       * GET COMMENTS FROM ISSUE BUTTON
        */
       
       const getCommentButton = document.createElement("button")
@@ -203,21 +204,25 @@
         '1': {
           'statusName': 'open',
           'nextStatusButtonName': 'Start progress',
+          'bgCollor': 'orange',
           'nextStatusID': 4
         },
         '3': {
           'statusName': 'In progress',
           'nextStatusButtonName': 'Close',
+          'bgCollor': 'red',
           'nextStatusID': 2
         },
         '6': {
           'statusName': 'Closed',
           'nextStatusButtonName': 'Reopen',
+          'bgCollor': 'green',
           'nextStatusID': 3
         },
         '4': {
           'statusName': 'Reopened',
           'nextStatusButtonName': 'Start progress',
+          'bgCollor': 'orange',
           'nextStatusID': 4
         }
       }
@@ -225,6 +230,7 @@
       const transactIssueButton = document.createElement("button")
       transactIssueButton.innerHTML = transactStatus[issue.fields.status.id].nextStatusButtonName
       transactIssueButton.onclick = () => transactIssue(issuekey, transactStatus[issue.fields.status.id].nextStatusID)
+      transactIssueButton.style = 'background-color: '+transactStatus[issue.fields.status.id].bgCollor
 
       issueTypeName.appendChild(issueTypeIcon)
       issueTypeName.appendChild(issueStatus)
